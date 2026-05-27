@@ -56,9 +56,23 @@ Same parameters as `delegate_task`.
 
 ## Build
 
+For development:
+
 ```bash
 dotnet build
 ```
+
+For a production binary — a self-contained, ReadyToRun, single-file executable that needs no
+installed .NET runtime — publish using the `win-x64` profile in `Properties/PublishProfiles/`:
+
+```bash
+dotnet publish -p:PublishProfile=win-x64
+```
+
+The result lands in `bin/Release/net10.0/win-x64/publish/OpenClaudeMcp.exe`. `appsettings.json` is
+copied next to it and stays editable without rebuilding. ReadyToRun (not Native AOT) is used on
+purpose: the server discovers MCP tools and binds configuration via reflection, which AOT trimming
+would break.
 
 ## Configuration
 
@@ -96,24 +110,27 @@ Configuration lives in `appsettings.json` under the `"OpenClaude"` section:
 
 Add to your MCP settings (`.claude/settings.json` or global):
 
+Point at the published single-file executable (recommended — stable, fast startup, no `dotnet`
+process in the chain):
+
 ```json
 {
   "mcpServers": {
     "openclaude": {
-      "command": "dotnet",
-      "args": ["run", "--project", "/path/to/OpenClaudeMcp"]
+      "command": "C:\\path\\to\\OpenClaudeMcp\\bin\\Release\\net10.0\\win-x64\\publish\\OpenClaudeMcp.exe"
     }
   }
 }
 ```
 
-Or, if published as a single executable:
+For development you can run it through the SDK instead:
 
 ```json
 {
   "mcpServers": {
     "openclaude": {
-      "command": "/path/to/OpenClaudeMcp/bin/Debug/net10.0/OpenClaudeMcp"
+      "command": "dotnet",
+      "args": ["run", "--project", "C:\\path\\to\\OpenClaudeMcp"]
     }
   }
 }

@@ -25,4 +25,17 @@ public sealed class OpenClaudeOptions
 
     /// File log destination. Empty = next to the exe.
     public string LogFilePath { get; set; } = "";
+
+    /// Appended via --append-system-prompt on every run. Forces headless execution:
+    /// cheap models (e.g. mimo) otherwise read imperative prompts as "let's discuss a plan"
+    /// and reply with a greeting instead of doing the work. Empty = don't append anything.
+    public string HeadlessSystemPrompt { get; set; } =
+        "You are running headless via -p, invoked programmatically by another agent. " +
+        "Execute the request immediately using your tools. Do not greet, do not restate the plan, " +
+        "do not ask for clarification, do not announce what you are about to do. " +
+        "Just do the work and report the concrete result.";
+
+    /// If true, pass --bare: skip CLAUDE.md auto-discovery, auto-memory, hooks, LSP, plugin sync,
+    /// attribution, prefetches. Right for a stateless delegate; pair with HeadlessSystemPrompt.
+    public bool UseBareMode { get; set; } = true;
 }

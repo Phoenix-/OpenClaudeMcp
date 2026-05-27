@@ -97,6 +97,15 @@ public sealed class OpenClaudeRunner
             "--output-format", "json",
         };
 
+        if (_options.UseBareMode)
+            args.Add("--bare");
+
+        if (!string.IsNullOrWhiteSpace(_options.HeadlessSystemPrompt))
+        {
+            args.Add("--append-system-prompt");
+            args.Add(_options.HeadlessSystemPrompt);
+        }
+
         var permissionMode = string.IsNullOrWhiteSpace(request.PermissionModeOverride)
             ? _options.DefaultPermissionMode
             : request.PermissionModeOverride;
