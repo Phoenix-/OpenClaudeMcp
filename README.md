@@ -186,6 +186,9 @@ OpenClaudeMcp/
 
 Because stdout is the MCP transport channel, the default console logger is disabled. All diagnostic output goes to a log file (configurable via `LogFilePath`, defaults to `openclaude-mcp.log` next to the executable).
 
+For why things are built the way they are, per-model quirks, and tuning notes, see
+[docs/engineering-notes.md](docs/engineering-notes.md).
+
 ## License
 
 [MIT](LICENSE)
